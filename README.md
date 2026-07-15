@@ -95,24 +95,6 @@ Una vez que el contenedor de Docker este encendido y los archivos de
 configuracion listos, ejecuta las migraciones para impactar el esquema:
 
    npx prisma migrate dev --name init
-
-------------------------------------------------------------------------
-CONSEJO PROFESIONAL PARA TU .GITIGNORE
-------------------------------------------------------------------------
-
-Dado que agregaste Docker y variables criticas, asegurate de que tu 
-archivo .gitignore tenga las siguientes exclusiones:
-
-# Entorno y Secretos
-.env
-
-# Node
-node_modules/
-package-lock.json
-
-# Docker
-.docker/
-
 ------------------------------------------------------------------------
 ESTRUCTURA DEL PROYECTO
 ------------------------------------------------------------------------
