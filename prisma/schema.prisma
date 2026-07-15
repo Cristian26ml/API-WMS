@@ -1,0 +1,122 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  engineType = "binary"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Usuario {
+  id         Int         @id @default(autoincrement())
+  nombre     String
+  email      String      @unique
+  password   String
+  rolId      Int
+  rol        Rol         @relation(fields: [rolId], references: [id])
+  ordenes    Orden[]
+  incidencias Incidencia[]
+}
+
+model Rol {
+  id          Int       @id @default(autoincrement())
+  nombre      String    // Administrativo, Operario, Supervisor
+  descripcion String?
+  usuarios    Usuario[]
+}
+
+model Producto {
+  id           Int          @id @default(autoincrement())
+  codigo       String       @unique
+  nombre       String
+  categoria    String
+  unidadMedida String
+  inventarios  Inventario[]
+}
+
+model Ubicacion {
+  id                     Int                    @id @default(autoincrement())
+  bodega                 String
+  zona                   String
+  rack                   String
+  posicion               String
+  inventarios            Inventario[]
+  unidadesAlmacenamiento UnidadAlmacenamiento[]
+}
+
+model Inventario {
+  id                    Int                    @id @default(autoincrement())
+  productoId            Int
+  producto              Producto               @relation(fields: [productoId], references: [id])
+  ubicacionId           Int
+  ubicacion             Ubicacion              @relation(fields: [ubicacionId], references: [id])
+  cantidad              Int
+  estado                String                 // Disponible, Reservado, Dañado
+  lote                  String
+  fechaVencimiento      DateTime
+  movimientos           Movimiento[]
+  unidadesAlmacenamiento UnidadAlmacenamiento[]
+  incidencias           Incidencia[]
+}
+
+model Orden {
+  id          Int          @id @default(autoincrement())
+  tipo        String       // Recepción, Despacho
+  fecha       DateTime     @default(now())
+  estado      String       // Pendiente, Procesada, Cancelada
+  usuarioId   Int
+  usuario     Usuario      @relation(fields: [usuarioId], references: [id])
+  movimientos Movimiento[]
+}
+
+model Movimiento {
+  id           Int        @id @default(autoincrement())
+  inventarioId Int
+  inventario   Inventario @relation(fields: [inventarioId], references: [id])
+  ordenId      Int
+  orden        Orden      @relation(fields: [ordenId], references: [id])
+  fecha        DateTime   @default(now())
+  cantidad     Int
+  tipo         String     // Entrada, Salida, Ajuste
+}
+
+model UnidadAlmacenamiento {
+  id           Int        @id @default(autoincrement())
+  codigo       String     @unique
+  inventarioId Int
+  inventario   Inventario @relation(fields: [inventarioId], references: [id])
+  ubicacionId  Int
+  ubicacion    Ubicacion  @relation(fields: [ubicacionId], references: [id])
+  estado       String     // Llena, Vacía, Reservada
+}
+
+model Proveedor {
+  id           Int    @id @default(autoincrement())
+  nombre       String
+  leadTime     Int    // días
+  pedidoMinimo Int
+}
+
+model Incidencia {
+  id           Int        @id @default(autoincrement())
+  tipo         String     // Daño, Faltante, Diferencia
+  descripcion  String
+  fecha        DateTime   @default(now())
+  usuarioId    Int
+  usuario      Usuario    @relation(fields: [usuarioId], references: [id])
+  inventarioId Int
+  inventario   Inventario @relation(fields: [inventarioId], references: [id])
+  fotoUrl      String?
+}
+
+model Indicador {
+  id     Int      @id @default(autoincrement())
+  nombre String   // IRA, Rotación, Stockout, Merma
+  valor  Decimal
+  fecha  DateTime @default(now())
+}
