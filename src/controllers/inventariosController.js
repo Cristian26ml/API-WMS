@@ -12,7 +12,7 @@ export const crearInventario = async (req, res) => {
 export const listarInventarios = async (req, res) => {
     try {
         const inventarios = await prisma.inventario.findMany({
-            include: { producto: true, ubicacion: true }
+            include: { producto: true, ubicacion: true, unidadesAlmacenamiento: true }
         });
         res.json(inventarios);
     } catch (error) {

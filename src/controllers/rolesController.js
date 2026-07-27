@@ -12,7 +12,7 @@ export const crearRol = async (req, res) => {
 export const listarRoles = async (req, res) => {
     try {
         const roles = await prisma.rol.findMany({
-            include: { usuarios: true } // opcional: muestra usuarios asociados
+            include: { usuarios: true } 
         });
         res.json(roles);
     } catch (error) {

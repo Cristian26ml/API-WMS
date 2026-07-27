@@ -15,6 +15,7 @@ import dashboardRoutes from './routes/dashboard.js';
 import dashboardInventariosRoutes from './routes/dashboardInventarios.js';
 import dashboardOrdenesRoutes from './routes/dashboardOrdenes.js';
 import dashboardIncidenciasRoutes from './routes/dashboardIncidencias.js';
+import unidadesAlmacenamientoRoutes from './routes/unidadesAlmacenamiento.js';
 
 const app = express();
 
@@ -36,5 +37,6 @@ app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/dashboard/inventarios', dashboardInventariosRoutes);
 app.use('/api/dashboard/ordenes', dashboardOrdenesRoutes);
 app.use('/api/dashboard/incidencias', dashboardIncidenciasRoutes);
+app.use('/api/unidades-almacenamiento', unidadesAlmacenamientoRoutes);
 
 export default app;
