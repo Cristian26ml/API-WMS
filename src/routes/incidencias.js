@@ -1,11 +1,32 @@
-import express from 'express';
-import { crearIncidencia, listarIncidencias, actualizarIncidencia, eliminarIncidencia } from '../controllers/incidenciasController.js';
+// src/routes/incidencias.js
+import { Router } from 'express';
+import {
+    obtenerDashboardIncidencias,
+    listarIncidencias,
+    crearIncidencia,
+    resolverIncidencia,
+    actualizarIncidencia,
+    eliminarIncidencia
+} from '../controllers/incidenciasController.js';
 
-const router = express.Router();
+const router = Router();
 
+// 📊 Dashboard / Tiempo Real + Registro Completo
+router.get('/', obtenerDashboardIncidencias);
+
+// 📋 Listado plano de incidencias
+router.get('/lista', listarIncidencias);
+
+// ➕ Crear nueva incidencia (Reporte desde Bodega)
 router.post('/', crearIncidencia);
-router.get('/', listarIncidencias);
+
+// 🔄 Resolver Incidencia (Acciones de Logística Inversa: Merma o Reingreso)
+router.put('/:id/resolver', resolverIncidencia);
+
+// ✏️ Actualización genérica de la incidencia
 router.put('/:id', actualizarIncidencia);
+
+// 🗑️ Eliminar incidencia
 router.delete('/:id', eliminarIncidencia);
 
 export default router;

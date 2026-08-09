@@ -24,6 +24,6 @@ io.on('connection', (socket) => {
     });
 });
 
-server.listen(PORT, () => {
-    console.log(`Servidor WMS corriendo en http://localhost:${PORT}`);
+server.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Servidor WMS corriendo en puerto ${PORT} (Accesible en red local)`);
 });

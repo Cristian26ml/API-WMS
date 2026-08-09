@@ -40,6 +40,7 @@ model Producto {
   categoria    String
   unidadMedida String
   inventarios  Inventario[]
+  incidencias  Incidencia[]
 }
 
 model Ubicacion {
@@ -115,16 +116,25 @@ enum EstadoIncidencia {
 }
 
 model Incidencia {
-  id           Int              @id @default(autoincrement())
-  tipo         String
-  descripcion  String
-  fecha        DateTime         @default(now())
-  usuarioId    Int?
-  usuario      Usuario?         @relation(fields: [usuarioId], references: [id])
+  id          Int     @id @default(autoincrement())
+  tipo        String // "Producto Dañado", "Devolución Cliente", "Faltante", etc.
+  descripcion String
+  estado      String  @default("Abierta") // "Abierta", "En Inspección", "Resuelta - Merma", "Resuelta - Reingreso"
+  resolucion  String? // Notas de la decisión tomada
+  cantidad    Int     @default(1)
+
+  // Relaciones
+  productoId Int?
+  producto   Producto? @relation(fields: [productoId], references: [id])
+
   inventarioId Int?
-  inventario   Inventario?      @relation(fields: [inventarioId], references: [id])
-  fotoUrl      String?
-  estado       EstadoIncidencia @default(Abierta)
+  inventario   Inventario? @relation(fields: [inventarioId], references: [id])
+
+  usuarioId Int?
+  usuario   Usuario? @relation(fields: [usuarioId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Indicador {
